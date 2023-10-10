@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.entity.Category;
@@ -32,18 +33,39 @@ public class ItemController {
 		model.addAttribute("items", items);
 		return "index";
 	}
-	
+
 	@GetMapping("/create")
 	public String create(@ModelAttribute ItemForm itemForm, Model model) {
 		List<Category> categories = this.categoryService.findAll();
 		model.addAttribute("categories", categories);
 		return "create";
 	}
-	
+
 	@PostMapping("/create")
 	public String create(@ModelAttribute ItemForm itemForm) {
 		this.itemService.insert(itemForm.getName(), itemForm.getPrice(), itemForm.getCategoryId());
 		return "redirect:/index";
 	}
-			
+
+	@GetMapping("/edit/{id}")
+	public String showEdit(@PathVariable Integer id, Model model, @ModelAttribute ItemForm itemForm) {
+		Item item = this.itemService.findById(id);
+		itemForm.setName(item.getName());
+		itemForm.setPrice(item.getPrice());
+		itemForm.setCategoryId(item.getCategory().getId());
+		List<Category> categories = this.categoryService.findAll();
+		model.addAttribute("id", id);
+		return "edit";
+	}
+	@PostMapping("/edit/{id}")
+	public String edit(@PathVariable Integer id, @ModelAttribute ItemForm itemForm) {
+		this.itemService.update(id, itemForm.getName(),itemForm.getPrice(), itemForm.getCategoryId());
+		return "redirect:/index";
+	}
+	
+	@PostMapping("/delete/{id}")
+	public String delete(@PathVariable Integer id) {
+		this.itemService.deleteById(id);
+		return "redirect:/index";
+	}
 }

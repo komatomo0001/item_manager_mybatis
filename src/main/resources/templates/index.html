@@ -30,7 +30,7 @@
 				</form>
 			</td>
 			<td>
-				<form method="post">
+				<form th:action="@{/delete/{id}(id=${item.id})}" method="post">
 					<input type="submit" value="削除">
 				</form>
 			</td>

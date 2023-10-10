@@ -39,5 +39,13 @@
 		keyProperty="id">
 		INSERT INTO ITEMS (ID, NAME, PRICE, CATEGORY_ID) VALUES (ITEMS_ID_SEQ.nextval, #{name}, #{price}, #{category.id})
 	</insert>
+	
+	<update id="update">
+		UPDATE ITEMS SET NAME = #{name}, PRICE = #{price}, CATEGORY_ID = #{category.id} WHERE ID = #{id}
+	</update>
+	
+	<delete id="deleteById">
+		DELETE FROM ITEMS WHERE ID = #{id}
+	</delete>
 
 </mapper>
